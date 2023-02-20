@@ -61,26 +61,36 @@ class _HomePageState extends State<HomePage> {
         body: ListView.builder(
           itemCount: _stories.length,
           itemBuilder: (context, index) {
+            var url= Uri.parse(_stories[index].url);
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
-                onTap: () {
-                  _navigateToShowCommentsPage(context, index);
+                onTap: () async {
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  } else {
+                    throw "Could not launch $url";
+                  }
                 },
-                title: Text(_stories[index].title,
+                title: Text(_stories[index].title ,
                     style: const TextStyle(fontSize: 18)),
-                trailing: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.all(Radius.circular(16))),
-                    alignment: Alignment.center,
-                    width: 50,
-                    height: 50,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text("${_stories[index].commentIds.length}",
-                          style: const TextStyle(color: Colors.white)),
-                    )),
+                trailing: InkWell(
+                  onTap:(){
+                    _navigateToShowCommentsPage(context, index);
+                  },
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(16))),
+                      alignment: Alignment.center,
+                      width: 50,
+                      height: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text("${_stories[index].commentIds.length}",
+                            style: const TextStyle(color: Colors.white)),
+                      )),
+                ),
               ),
             );
           },
