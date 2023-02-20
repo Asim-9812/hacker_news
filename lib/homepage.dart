@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hacker_news/story.dart';
 import 'package:hacker_news/service.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'comments.dart';
@@ -61,6 +62,9 @@ class _HomePageState extends State<HomePage> {
         body: ListView.builder(
           itemCount: _stories.length,
           itemBuilder: (context, index) {
+            var millis = _stories[index].time;
+            var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
+            var d12 = DateFormat('hh:mm a').format(dt);
             var url= Uri.parse(_stories[index].url);
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -72,27 +76,21 @@ class _HomePageState extends State<HomePage> {
                     throw "Could not launch $url";
                   }
                 },
-                title: Text(_stories[index].title ,
+                leading: Text( '${1+ index}'),
+                title: Text(_stories[index].title,
                     style: const TextStyle(fontSize: 18)),
-                trailing: InkWell(
+                subtitle: InkWell(
                   onTap:(){
                     _navigateToShowCommentsPage(context, index);
                   },
-                  child: Container(
-                      decoration: const BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.all(Radius.circular(16))),
-                      alignment: Alignment.center,
-                      width: 50,
-                      height: 50,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text("${_stories[index].commentIds.length}",
-                            style: const TextStyle(color: Colors.white)),
-                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: Text("${_stories[index].commentIds.length} comments | ${d12.toString()}",
+                        style: const TextStyle(color: Colors.black),
+                  ),
                 ),
               ),
-            );
+            ));
           },
         ));
   }

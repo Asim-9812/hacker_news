@@ -24,7 +24,7 @@ class Webservice {
     final response = await http.get(Uri.parse(UrlHelper.urlForTopStories()));
     if (response.statusCode == 200) {
       Iterable storyIds = jsonDecode(response.body);
-      return Future.wait(storyIds.take(7).map((storyId) {
+      return Future.wait(storyIds.take(15).map((storyId) {
         return _getStory(storyId);
       }));
 
