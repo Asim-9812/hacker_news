@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, index) {
             var millis = _stories[index].time;
             var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
-            var d12 = DateFormat('hh:mm a').format(dt);
+            var d12 = DateFormat('MM/dd/yyyy, hh:mm a').format(dt);
             var url= Uri.parse(_stories[index].url);
             return Padding(
               padding: const EdgeInsets.all(8.0),
